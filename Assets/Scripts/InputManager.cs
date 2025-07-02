@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour, Player_Input.IOnFootActions
     private Player_Input.OnFootActions onFootActions;
 
     private PlayerMotor motor;
+    private PlayerLook look;
 
     private void Awake()
     {
@@ -17,6 +18,14 @@ public class InputManager : MonoBehaviour, Player_Input.IOnFootActions
         onFootActions.SetCallbacks(this);
 
         motor = GetComponent<PlayerMotor>();
+        look = GetComponent<PlayerLook>();
+    }
+
+
+    public void OnLook(InputAction.CallbackContext context)
+    {
+        Vector2 mouseDelta = context.ReadValue<Vector2>();
+        look.ProcessLook(mouseDelta);
     }
 
     private void OnEnable()
