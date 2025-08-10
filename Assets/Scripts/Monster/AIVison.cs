@@ -6,10 +6,14 @@ public class AIVision : MonoBehaviour
     public Transform player;
     public float visionRange = 15f;
     public float viewAngle = 90f;
-    public LayerMask obstacleMask; 
+    public LayerMask obstacleMask;
 
     public bool CanSeePlayer()
     {
+        // If the player is hiding, AI can't see them
+        if (HidingSpot.IsPlayerHiding)
+            return false;
+
         Vector3 directionToPlayer = (player.position - transform.position).normalized;
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
@@ -18,7 +22,6 @@ public class AIVision : MonoBehaviour
         {
             if (Vector3.Angle(transform.forward, directionToPlayer) < viewAngle / 2f)
             {
-
                 if (!Physics.Linecast(transform.position, player.position, obstacleMask))
                 {
                     return true;

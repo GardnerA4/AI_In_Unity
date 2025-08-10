@@ -2,12 +2,14 @@ using UnityEngine;
 
 public class HidingSpot : MonoBehaviour
 {
+    public static bool IsPlayerHiding { get; private set; } 
+
     private bool playerInRange = false;
     private bool isHiding = false;
     private GameObject player;
     private Vector3 originalPosition;
 
-    public Transform hidePosition; // Set this in Inspector to where the player should hide
+    public Transform hidePosition; 
 
     void OnTriggerEnter(Collider other)
     {
@@ -51,10 +53,9 @@ public class HidingSpot : MonoBehaviour
 
         originalPosition = player.transform.position;
         player.transform.position = hidePosition.position;
-        player.GetComponent<CharacterController>().enabled = false; // Optional: freeze movement
+        player.GetComponent<CharacterController>().enabled = false;
         isHiding = true;
-
-        // You can also disable player input here if needed
+        IsPlayerHiding = true; 
     }
 
     void UnhidePlayer()
@@ -64,7 +65,6 @@ public class HidingSpot : MonoBehaviour
         player.transform.position = originalPosition;
         player.GetComponent<CharacterController>().enabled = true;
         isHiding = false;
-
-        // Re-enable player input if you disabled it
+        IsPlayerHiding = false; 
     }
 }
