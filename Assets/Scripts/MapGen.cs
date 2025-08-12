@@ -12,6 +12,9 @@ public class MapGen : MonoBehaviour
         public GameObject northWall, southWall, eastWall, westWall;
     }
 
+    public GameObject monster;
+    public Transform player;
+
     [Header("Maze Settings")]
     public int width = 10;
     public int height = 10;
@@ -98,6 +101,8 @@ public class MapGen : MonoBehaviour
 
         // Bake NavMesh at runtime using NavMeshBuilder
         BakeNavMesh();
+
+        SpawnMonster();
 
         yield break;
     }
@@ -195,7 +200,7 @@ public class MapGen : MonoBehaviour
                 continue;
             }
 
-            Vector3 spawnPos = new Vector3(x * cellSize, 0, y * cellSize);
+            Vector3 spawnPos = new Vector3(x * cellSize, 1, y * cellSize);
             Instantiate(hidingSpotPrefab, spawnPos, Quaternion.identity, transform);
 
             occupiedCells.Add(cellPos);
@@ -247,4 +252,24 @@ public class MapGen : MonoBehaviour
             Debug.LogError("Failed to bake NavMesh at runtime.");
         }
     }
+
+    void SpawnMonster()
+    {
+        Vector3 spawnPosition = new Vector3(65f, 1f, 65f);
+        Quaternion spawnRotation = Quaternion.identity;
+
+        
+        GameObject obj = Instantiate(monster, spawnPosition, spawnRotation);
+
+
+        AIVision vision = obj.GetComponent<AIVision>();
+        if (vision != null)
+            vision.player = player;
+
+
+        AIController controller = obj.GetComponent<AIController>();
+        if (controller != null)
+            controller.player = player;
+    }
+
 }
